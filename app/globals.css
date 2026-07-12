@@ -1,0 +1,219 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-gold: var(--gold);
+  --color-gold-muted: var(--gold-muted);
+
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+:root {
+  color-scheme: dark;
+  /* Black lacquer neutrals */
+  --background: oklch(0.13 0.004 60);
+  --foreground: oklch(0.93 0.006 80);
+  --card: oklch(0.16 0.005 60);
+  --card-foreground: oklch(0.93 0.006 80);
+  --popover: oklch(0.16 0.005 60);
+  --popover-foreground: oklch(0.93 0.006 80);
+  /* Gold primary */
+  --primary: oklch(0.78 0.11 82);
+  --primary-foreground: oklch(0.14 0.004 60);
+  --secondary: oklch(0.2 0.005 60);
+  --secondary-foreground: oklch(0.93 0.006 80);
+  --muted: oklch(0.2 0.005 60);
+  --muted-foreground: oklch(0.62 0.01 70);
+  --accent: oklch(0.22 0.01 70);
+  --accent-foreground: oklch(0.93 0.006 80);
+  --destructive: oklch(0.55 0.2 27);
+  --border: oklch(0.28 0.008 70 / 60%);
+  --input: oklch(0.28 0.008 70);
+  --ring: oklch(0.78 0.11 82);
+
+  /* Accents */
+  --gold: oklch(0.8 0.12 82);
+  --gold-muted: oklch(0.66 0.08 80);
+
+  --radius: 0.25rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: 'liga' 1, 'kern' 1;
+  }
+  ::selection {
+    background: oklch(0.8 0.12 82 / 30%);
+    color: var(--foreground);
+  }
+}
+
+@layer utilities {
+  .text-gold {
+    color: var(--gold);
+  }
+  .gold-line {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--gold-muted),
+      transparent
+    );
+  }
+  /* Reveal-on-scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .tracking-widest-xl {
+    letter-spacing: 0.4em;
+  }
+  .lacquer {
+    background-image: radial-gradient(
+        120% 80% at 50% 0%,
+        oklch(0.2 0.01 70 / 40%),
+        transparent 60%
+      ),
+      radial-gradient(60% 50% at 100% 100%, oklch(0.18 0.02 80 / 30%), transparent 70%);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@layer utilities {
+  /* Fine film grain overlay */
+  .grain-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+  @keyframes grain-shift {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    10% {
+      transform: translate(-2%, -3%);
+    }
+    30% {
+      transform: translate(3%, -2%);
+    }
+    50% {
+      transform: translate(-1%, 2%);
+    }
+    70% {
+      transform: translate(2%, 3%);
+    }
+    90% {
+      transform: translate(-3%, 1%);
+    }
+  }
+  .animate-grain {
+    animation: grain-shift 1.2s steps(4) infinite;
+  }
+
+  /* Ink brush reveal masks */
+  @keyframes ink-in {
+    0% {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0.2;
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+    }
+  }
+  .ink-reveal {
+    animation: ink-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* Paper texture (subtle) */
+  .paper-texture {
+    background-image: radial-gradient(
+        oklch(0.3 0.02 80 / 8%) 1px,
+        transparent 1px
+      ),
+      radial-gradient(oklch(0.3 0.02 80 / 6%) 1px, transparent 1px);
+    background-size: 22px 22px, 16px 16px;
+    background-position: 0 0, 11px 11px;
+  }
+
+  @keyframes float-slow {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+  .animate-float-slow {
+    animation: float-slow 7s ease-in-out infinite;
+  }
+
+  .cursor-none-desktop {
+    cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-grain,
+  .animate-float-slow,
+  .ink-reveal {
+    animation: none !important;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
